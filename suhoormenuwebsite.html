@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline'; connect-src 'self' https://*.firebaseio.com https://*.googleapis.com; font-src 'self' data:;">
+<title>Layali - Suhoor Truck</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  min-height: 100vh;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.02) 35px, rgba(255,255,255,.02) 70px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+header {
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(10px);
+  color: white;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-size: 32px;
+  font-weight: bold;
+  background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 10px rgba(245, 158, 11, 0.3);
+}
+
+.logo-subtitle {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: -5px;
+  letter-spacing: 2px;
+}
+
+.top-buttons button {
+  margin-left: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+}
+
+.top-buttons button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.main {
+  padding: 30px;
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 30px;
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.categories {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
+}
+
+.categories button {
+  padding: 12px 24px;
+  border-radius: 25px;
+  border: 2px solid transparent;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.categories button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+.categories .active {
+  background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+  color: #0f172a;
+  border-color: #fbbf24;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+}
+
+.menu {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+  border-color: #f59e0b;
+}
+
+.card h3 {
+  color: #0f172a;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.price {
+  color: #f59e0b;
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.card button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.card button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+}
+
+.cart {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  position: sticky;
+  top: 100px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+.cart h2 {
+  color: #0f172a;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f59e0b;
+}
+
+.cart ul {
+  list-style: none;
+  margin-bottom: 20px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.cart li {
+  padding: 12px;
+  background: #f1f5f9;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #0f172a;
+}
+
+.cart li button {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.3s ease;
+}
+
+.cart li button:hover {
+  background: #dc2626;
+}
+
+.cart-total {
+  background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+  padding: 15px;
+  border-radius: 10px;
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.cart-actions button {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  margin-bottom: 10px;
+}
+
+.send-order-btn {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: white;
+}
+
+.send-order-btn:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+}
+
+.clear-cart-btn {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 2px solid #ef4444 !important;
+}
+
+.clear-cart-btn:hover {
+  background: #ef4444;
+  color: white;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-box {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-box h2 {
+  color: #0f172a;
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+
+.modal-box p {
+  color: #64748b;
+  margin-bottom: 25px;
+}
+
+.modal-box input {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 16px;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+.modal-box input:focus {
+  outline: none;
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1);
+}
+
+.modal-box button {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modal-box button:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+}
+
+.cashier-login-btn {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+}
+
+.cashier-login-btn:hover {
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4) !important;
+}
+
+.success-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 20px;
+  animation: scaleIn 0.5s ease;
+}
+
+@keyframes scaleIn {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.success-icon::after {
+  content: '✓';
+  color: white;
+  font-size: 48px;
+  font-weight: bold;
+}
+
+#cashierPanel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  z-index: 2000;
+  overflow: auto;
+  display: none;
+}
+
+#cashierPanel.open {
+  display: block;
+}
+
+.cashier-header {
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 25px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.cashier-header h2 {
+  color: white;
+  font-size: 28px;
+}
+
+.close-cashier {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.close-cashier:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+}
+
+.cashier-content {
+  padding: 30px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.orders-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.orderBox {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 15px;
+  border-left: 6px solid #f59e0b;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.orderBox:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+.orderBox b {
+  color: #0f172a;
+  font-size: 22px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.orderBox .order-items {
+  color: #475569;
+  margin: 15px 0;
+  line-height: 1.8;
+  font-size: 15px;
+}
+
+.orderBox .order-total {
+  color: #f59e0b;
+  font-weight: bold;
+  font-size: 20px;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 2px solid #f1f5f9;
+}
+
+.orderBox button {
+  margin-top: 15px;
+  padding: 12px 24px;
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.orderBox button:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+}
+
+.order-time {
+  font-size: 13px;
+  color: #94a3b8;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.empty-cart {
+  text-align: center;
+  color: #94a3b8;
+  padding: 40px 20px;
+}
+
+@media (max-width: 968px) {
+  .main {
+    grid-template-columns: 1fr;
+  }
+  
+  .cart {
+    position: relative;
+    top: 0;
+  }
+  
+  .orders-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .cashier-header {
+    padding: 20px;
+  }
+  
+  .cashier-header h2 {
+    font-size: 20px;
+  }
+  
+  .close-cashier {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div>
+    <div class="logo">🌙 Layali</div>
+    <div class="logo-subtitle">SUHOOR TRUCK</div>
+  </div>
+  <div class="top-buttons">
+    <button onclick="openCashier()">📊 Cashier Panel</button>
+  </div>
+</header>
+
+<div class="main">
+  <div>
+    <div class="categories" id="categories"></div>
+    <div class="menu" id="menu"></div>
+  </div>
+
+  <div class="cart">
+    <h2>🛒 Your Order</h2>
+    <ul id="cartList"></ul>
+    <div id="emptyCartMsg" class="empty-cart">Your cart is empty</div>
+    <div class="cart-total">
+      Total: <span id="total">0</span> EGP
+    </div>
+    <div class="cart-actions">
+      <button class="send-order-btn" onclick="sendOrder()">📤 Send Order</button>
+      <button class="clear-cart-btn" onclick="clearCart()">🗑️ Clear Cart</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="tableModal">
+  <div class="modal-box">
+    <h2>Welcome to Layali! 🌙</h2>
+    <p>Please enter your table number to continue</p>
+    <input id="tableInput" type="number" placeholder="Enter table number" autofocus>
+    <button onclick="saveTable()">Continue</button>
+    <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #e2e8f0;">
+      <button type="button" class="cashier-login-btn" id="cashierLoginBtn">
+        📊 Cashier Login
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="cashierLoginModal">
+  <div class="modal-box">
+    <div style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px; box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);">
+      <span style="font-size: 40px;">🔐</span>
+    </div>
+    <h2>Cashier Login</h2>
+    <p>Enter your access code to view live orders</p>
+    <input id="cashierCodeInput" type="password" placeholder="Enter 4-digit code" maxlength="4" style="text-align: center; font-size: 24px; letter-spacing: 8px;">
+    <button onclick="verifyCashierCode()" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
+      🔓 Login
+    </button>
+    <button onclick="closeCashierLoginModal()" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 2px solid #ef4444; margin-top: 10px;">
+      Cancel
+    </button>
+  </div>
+</div>
+
+<div class="modal" id="successModal">
+  <div class="modal-box">
+    <div class="success-icon"></div>
+    <h2>Order Sent Successfully!</h2>
+    <p>Your order has been sent to the kitchen. It will be ready soon!</p>
+    <p style="color: #f59e0b; font-weight: bold;">Ramadan Kareem! 🌙</p>
+    <button onclick="closeSuccessModal()">OK</button>
+  </div>
+</div>
+
+<div class="modal" id="clearCartModal">
+  <div class="modal-box">
+    <div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); width: 80px; height: 80px; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px; box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);">
+      <span style="font-size: 40px;">🗑️</span>
+    </div>
+    <h2>Clear Cart?</h2>
+    <p>Are you sure you want to remove all items from your cart?</p>
+    <button onclick="confirmClearCart()" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);">
+      Yes, Clear Cart
+    </button>
+    <button onclick="closeClearCartModal()" style="background: rgba(100, 116, 139, 0.1); color: #64748b; border: 2px solid #cbd5e1; margin-top: 10px;">
+      No, Keep Items
+    </button>
+  </div>
+</div>
+
+<div id="cashierPanel">
+  <div class="cashier-header">
+    <h2>📋 Live Orders - Cashier Dashboard</h2>
+    <button class="close-cashier" onclick="closeCashier()">← Back to Customer View</button>
+  </div>
+  <div class="cashier-content">
+    <div class="orders-grid" id="cashierOrders"></div>
+  </div>
+</div>
+
+<!-- FIREBASE SCRIPTS -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+// GLOBAL VARIABLES - Declare at the top
+let table = null;
+let cart = [];
+let currentCategory = "ful";
+let db = null;
+
+// FIREBASE CONFIG
+const firebaseConfig = {
+  apiKey: "AIzaSyA5-sFpuvbcL3qDGdoGzQBQ_wXn2NsIbpk",
+  authDomain: "layali-suhoor-truck.firebaseapp.com",
+  projectId: "layali-suhoor-truck",
+  storageBucket: "layali-suhoor-truck.firebasestorage.app",
+  messagingSenderId: "216047314713",
+  appId: "1:216047314713:web:383673bd0e23bec94f8788"
+
+};
+
+// Initialize Firebase
+try {
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.firestore();
+  console.log("Firebase initialized successfully!");
+} catch (error) {
+  console.error("Firebase initialization error:", error);
+  alert("Firebase connection failed. Please check your configuration.");
+}
+
+// MENU DATA
+const menuData = {
+  ful: [
+    { name: "Classic Ful (Plain)", price: 15 },
+    { name: "Ful with Tahini", price: 18 },
+    { name: "Ful with Eggs", price: 22 },
+    { name: "Spicy Ful (Har)", price: 17 },
+    { name: "Alexandrian Style Ful", price: 20 }
+  ],
+  eggs: [
+    { name: "Eggs with Basterma", price: 30 },
+    { name: "Eggs with Sausage", price: 28 },
+    { name: "Cheese Omelette", price: 25 }
+  ],
+  sandwiches: [
+    { name: "Taameya Sandwich", price: 12 },
+    { name: "Taameya Plate", price: 20 },
+    { name: "Bread Plates", price: 15 },
+    { name: "Cheese & Tomato Bowl", price: 18 }
+  ],
+  sides: [
+    { name: "French Fries", price: 15 },
+    { name: "Spicy Fries", price: 18 },
+    { name: "Fries with Cheese", price: 22 }
+  ],
+  extras: [
+    { name: "Dates Portion (Free Welcome Gift)", price: 0 }
+  ],
+  drinks: [
+    { name: "Karkadeh Soda", price: 15 },
+    { name: "Tamarhind Soda", price: 15 },
+    { name: "Water", price: 5 },
+    { name: "Mango Juice", price: 20 },
+    { name: "Shay (Tea)", price: 10 },
+    { name: "Fresh Juices (Seasonal)", price: 25 }
+  ]
+};
+
+const categoryNames = {
+  ful: "🫘 Ful",
+  eggs: "🍳 Eggs",
+  sandwiches: "🥙 Sandwiches & Plates",
+  sides: "🍟 Sides",
+  extras: "🎁 Extras",
+  drinks: "🥤 Drinks"
+};
+
+// DEFINE FUNCTIONS BEFORE INITIALIZATION
+function openCashierFromModal() {
+  console.log("Opening cashier login modal");
+  // Close table modal
+  document.getElementById("tableModal").style.display = "none";
+  // Show cashier login modal
+  document.getElementById("cashierLoginModal").style.display = "flex";
+  // Focus on code input
+  setTimeout(function() {
+    document.getElementById("cashierCodeInput").focus();
+  }, 300);
+}
+
+function closeCashierLoginModal() {
+  document.getElementById("cashierLoginModal").style.display = "none";
+  // Show table modal again
+  document.getElementById("tableModal").style.display = "flex";
+}
+
+function verifyCashierCode() {
+  var code = document.getElementById("cashierCodeInput").value;
+  
+  console.log("Code entered:", code);
+  
+  if (code === "") {
+    alert("⚠️ Please enter a code");
+    return;
+  }
+  
+  if (code !== "0000") {
+    alert("❌ Incorrect code! Access denied.");
+    document.getElementById("cashierCodeInput").value = "";
+    document.getElementById("cashierCodeInput").focus();
+    return;
+  }
+  
+  console.log("✅ Correct code! Opening cashier panel...");
+  
+  // Close login modal
+  document.getElementById("cashierLoginModal").style.display = "none";
+  
+  // Open cashier panel (full screen)
+  document.getElementById("cashierPanel").classList.add("open");
+  document.body.style.overflow = "hidden";
+  
+  // Clear the code input for next time
+  document.getElementById("cashierCodeInput").value = "";
+}
+
+// INITIALIZATION
+window.onload = function() {
+  drawCategories();
+  drawMenu();
+  drawCart();
+  document.getElementById("tableModal").style.display = "flex";
+  
+  // Add event listener to cashier login button
+  var cashierBtn = document.getElementById("cashierLoginBtn");
+  if (cashierBtn) {
+    cashierBtn.addEventListener("click", function() {
+      console.log("Cashier button clicked!");
+      openCashierFromModal();
+    });
+  }
+  
+  // Add enter key support for cashier code
+  var codeInput = document.getElementById("cashierCodeInput");
+  if (codeInput) {
+    codeInput.addEventListener("keypress", function(e) {
+      if (e.key === "Enter") {
+        verifyCashierCode();
+      }
+    });
+  }
+  
+  if (db) {
+    listenCashier();
+  }
+};
+
+// FUNCTIONS
+function drawCategories() {
+  const container = document.getElementById("categories");
+  let html = "";
+  
+  Object.keys(menuData).forEach(function(cat) {
+    const isActive = cat === currentCategory ? "active" : "";
+    html += '<button class="' + isActive + '" onclick="setCat(\'' + cat + '\')">' + categoryNames[cat] + '</button>';
+  });
+  
+  container.innerHTML = html;
+}
+
+function setCat(cat) {
+  currentCategory = cat;
+  drawCategories();
+  drawMenu();
+}
+
+function drawMenu() {
+  const container = document.getElementById("menu");
+  let html = "";
+  
+  menuData[currentCategory].forEach(function(item) {
+    const priceText = item.price === 0 ? "FREE" : item.price + " EGP";
+    const buttonText = item.price === 0 ? '🎁 Add Gift' : '➕ Add to Cart';
+    const safeName = item.name.replace(/'/g, "\\'");
+    
+    html += '<div class="card">' +
+            '<h3>' + item.name + '</h3>' +
+            '<div class="price">' + priceText + '</div>' +
+            '<button onclick="addItem(\'' + safeName + '\', ' + item.price + ')">' + buttonText + '</button>' +
+            '</div>';
+  });
+  
+  container.innerHTML = html;
+}
+
+function saveTable() {
+  const value = document.getElementById("tableInput").value.trim();
+  if (value === "") {
+    alert("Please enter a table number");
+    return;
+  }
+  table = value;
+  document.getElementById("tableModal").style.display = "none";
+}
+
+function addItem(name, price) {
+  cart.push({ name: name, price: price });
+  drawCart();
+}
+
+function removeItem(index) {
+  cart.splice(index, 1);
+  drawCart();
+}
+
+function drawCart() {
+  const list = document.getElementById("cartList");
+  const emptyMsg = document.getElementById("emptyCartMsg");
+  let total = 0;
+  
+  if (cart.length === 0) {
+    list.innerHTML = "";
+    emptyMsg.style.display = "block";
+  } else {
+    emptyMsg.style.display = "none";
+    let html = "";
+    
+    cart.forEach(function(item, index) {
+      total += item.price;
+      const priceText = item.price === 0 ? "FREE" : item.price + " EGP";
+      html += '<li>' +
+              '<span>' + item.name + ' - ' + priceText + '</span>' +
+              '<button onclick="removeItem(' + index + ')">✕</button>' +
+              '</li>';
+    });
+    
+    list.innerHTML = html;
+  }
+  
+  document.getElementById("total").innerText = total;
+}
+
+function clearCart() {
+  if (cart.length === 0) {
+    alert("Your cart is already empty!");
+    return;
+  }
+  // Show clear cart confirmation modal
+  document.getElementById("clearCartModal").style.display = "flex";
+}
+
+function confirmClearCart() {
+  cart = [];
+  drawCart();
+  closeClearCartModal();
+}
+
+function closeClearCartModal() {
+  document.getElementById("clearCartModal").style.display = "none";
+}
+
+function sendOrder() {
+  console.log("Send order button clicked");
+  console.log("DB status:", db);
+  console.log("Cart:", cart);
+  console.log("Table:", table);
+  
+  if (!db) {
+    alert("Firebase is not connected. Please check your configuration and follow the setup guide.");
+    return;
+  }
+  
+  if (cart.length === 0) {
+    alert("Your cart is empty! Please add items first.");
+    return;
+  }
+  
+  if (!table) {
+    alert("Table number is missing. Please refresh the page.");
+    return;
+  }
+
+  const total = document.getElementById("total").innerText;
+  
+  // Show loading state
+  var sendBtn = document.querySelector(".send-order-btn");
+  sendBtn.disabled = true;
+  sendBtn.innerHTML = "⏳ Sending...";
+  
+  console.log("Sending order to Firebase...");
+
+  db.collection("orders").add({
+    table: table,
+    items: cart,
+    total: total,
+    time: firebase.firestore.FieldValue.serverTimestamp(),
+    status: "new"
+  }).then(function() {
+    console.log("Order sent successfully!");
+    sendBtn.disabled = false;
+    sendBtn.innerHTML = "📤 Send Order";
+    cart = [];
+    drawCart();
+    showSuccessModal();
+  }).catch(function(error) {
+    console.error("Firebase error:", error);
+    sendBtn.disabled = false;
+    sendBtn.innerHTML = "📤 Send Order";
+    alert("Error sending order: " + error.message + "\n\nPlease check:\n1. Firebase credentials are correct\n2. Firestore is enabled\n3. Security rules are set");
+  });
+}
+
+function showSuccessModal() {
+  document.getElementById("successModal").style.display = "flex";
+}
+
+function closeSuccessModal() {
+  document.getElementById("successModal").style.display = "none";
+}
+
+function openCashier() {
+  // Show cashier login modal
+  document.getElementById("cashierLoginModal").style.display = "flex";
+  setTimeout(function() {
+    document.getElementById("cashierCodeInput").focus();
+  }, 300);
+}
+
+function closeCashier() {
+  document.getElementById("cashierPanel").classList.remove("open");
+  document.body.style.overflow = "auto"; // Re-enable scrolling
+}
+
+function listenCashier() {
+  if (!db) return;
+  
+  db.collection("orders")
+    .orderBy("time", "desc")
+    .onSnapshot(function(snapshot) {
+      const container = document.getElementById("cashierOrders");
+      
+      if (snapshot.empty) {
+        container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; color: #94a3b8; font-size: 18px; background: rgba(255,255,255,0.1); border-radius: 16px;">No orders yet. Waiting for customers... 🌙</div>';
+        return;
+      }
+      
+      let html = "";
+      snapshot.forEach(function(doc) {
+        const order = doc.data();
+        const items = order.items.map(function(i) { return i.name; }).join("<br>• ");
+        const time = order.time && order.time.toDate ? order.time.toDate().toLocaleTimeString() : "N/A";
+        
+        html += '<div class="orderBox">' +
+                '<b>🍽️ Table ' + order.table + '</b>' +
+                '<div class="order-time">⏰ ' + time + '</div>' +
+                '<div class="order-items">• ' + items + '</div>' +
+                '<div class="order-total">Total: ' + order.total + ' EGP</div>' +
+                '<button onclick="completeOrder(\'' + doc.id + '\')">✓ Mark as Complete</button>' +
+                '</div>';
+      });
+      
+      container.innerHTML = html;
+    });
+}
+
+function completeOrder(orderId) {
+  if (!db) return;
+  
+  if (confirm("Mark this order as completed?")) {
+    db.collection("orders").doc(orderId).delete()
+      .then(function() {
+        console.log("Order completed");
+      })
+      .catch(function(error) {
+        alert("Error: " + error.message);
+      });
+  }
+}
+</script>
+
+</body>
+</html>
